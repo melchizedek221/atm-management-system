@@ -15,7 +15,8 @@ void mainMenu(struct User u)
     printf("\n\t\t\t\t[5]- Make Transaction\n");
     printf("\n\t\t\t\t[6]- Remove existing account\n");
     printf("\n\t\t\t\t[7]- Transfer ownership\n");
-    printf("\n\t\t\t\t[8]- Exit\n");
+    printf("\n\t\t\t\t[8]- Messages \n");
+    printf("\n\t\t\t\t[9]- Exit\n");
     scanf("%d", &option);
 
     switch (option)
@@ -26,7 +27,6 @@ void mainMenu(struct User u)
     case 2:
         // student TODO : add your **Update account information** function
         // here
-       // updateInf(r); 
        updateAcc();
        
     break;
@@ -55,7 +55,13 @@ void mainMenu(struct User u)
         // here
         transferAcc();
         break;
-    case 8:
+
+    case 8 : 
+        //Messages
+         message();
+        break;
+
+    case 9:
          printf("\n\n\t\t*** Thanks for using ATM! ***\n\n");
 
         exit(1);

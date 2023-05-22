@@ -47,3 +47,4 @@ void removeAcc(void);
 void transferAcc(void);
 void stayOrReturnMain();
 void stayOrReturnInit();
+void message();

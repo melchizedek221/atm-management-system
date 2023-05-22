@@ -143,7 +143,6 @@ void createNewAcc(struct User u)
     FILE *pf = fopen(RECORDS, "a+");
     FILE *pf1 = fopen(USERS, "a+");
 
-acc:
     system("clear");
 
     u.id=lastId(pf);
@@ -153,13 +152,8 @@ acc:
     scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
     printf("\n\n\t\tEnter your name : ");
     scanf("%s", r.userName);
-    printf("\n\n\t\tEnter your username : ");
-    scanf("%s", u.name);
     printf("\n\n\t\tEnter your Id : ");
-    scanf("%d", &cr.id);
-
-    checkUsername(cr);
-    r.id=cr.id;
+    scanf("%d", &r.id);
     printf("\n\n\t\tEnter your account number : ");
     scanf("%d", &r.accountId);
     printf("\n\n\t\tEnter your country : ");
@@ -170,11 +164,9 @@ acc:
     scanf("%lf", &r.balance);
     printf("\n\n\t\tChoose the type of account :\n\n\t\t\t-> saving\n\n\t\t\t-> current\n\n\t\t\t-> fixed01(for 1 year)\n\n\t\t\t-> fixed02(for 2 years)\n\n\t\t\t-> fixed03(for 3 years)\n\n\n\t\t\tEnter your choice : ");
     scanf("%s", r.accountType);
-    printf("\n\n\t\tEnter your password : ");
-    scanf("%s", u.password);
+
    
     saveAccountToFile(pf, r, u);
-    saveUsersToFile(pf1, u, r);
 
     fclose(pf);
     fclose(pf1);
@@ -223,12 +215,10 @@ void checkAllAccounts(struct User u)
 void registration(struct User *u)
 {
     struct Record r;
-   // struct Record cr;
     
     FILE *pf = fopen(RECORDS, "a+");
     FILE *pf1 = fopen(USERS, "a+");
 
-//noAccount:
     system("clear");
 
     u->id=lastId(pf);
@@ -287,25 +277,26 @@ void updateAcc(void)
 
     system("clear");
     printf("\n\t\t******** Update Account Information *********\n");       
-    printf("\n\n\t\tUser ID : ");
-    scanf("%d",&cr.id);
+    printf("\n\n\tYour account number : ");
+    scanf("%d",&cr.accountId);
     
     while(getAccountFromFile(old, &r, &u))
     {
-        if (r.id==cr.id)
-        
-        {   test=1;
+        if (r.accountId==cr.accountId)
+        {   
+            test=1;
             
             system("clear");
             printf("\n\t\t******** Update Account Information *********\n");       
-            printf("\n\n\t\tWhich information do you want to change?\n\n\t\t\t1.country\n\n\t\t\t2.Phone : ");
+            printf("\n\n\t\tWhich information do you want to change?\n\n\t\t\t1. Country\n\n\t\t\t2. Phone ");
             printf("\n\n\n\t\t\tEnter your choice : ");
             scanf("%d",&choice);
             
             system("clear");
             printf("\n\t\t******** Update Account Information *********\n");                
             if(choice==1)
-                {printf("\n\n\t\tEnter the new country : ");
+                {
+                    printf("\n\n\t\tEnter the new country : ");
                 scanf("%s",cr.country);
                 fprintf(newrec, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n\n",
                     u.id,
@@ -340,10 +331,10 @@ void updateAcc(void)
                     r.accountType);                
                      
                 success(u);
-
-            }
+                }
             else
-                fprintf(newrec, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n\n",
+                {
+                    fprintf(newrec, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n\n",
                     u.id,
                     r.id,
 	                r.userName,
@@ -354,19 +345,22 @@ void updateAcc(void)
                     r.country,
                     r.phone,
                     r.balance,
-                    r.accountType);    }
-    fclose(old);
-    fclose(newrec);
-    remove(RECORDS);
-    rename("new.txt", RECORDS);
+                    r.accountType);  
+                }  
+        }
+    }
 
-if(test!=1)
-{  
-    printf("\n\n\t\tRecord not found!!\a\a\a");
-     stayOrReturnMain();
-}
+    if(test==0) 
+    {  
+        printf("\n\t\tRecord not found!!\a\a\a\n");
+        remove("new.txt");
+        stayOrReturnMain();
+    }
+fclose(old);
+fclose(newrec);
+remove(RECORDS);
+rename("new.txt", RECORDS);
 
-}
 }
 
 //Transactions
@@ -380,12 +374,12 @@ void transact(void)
     struct User u;
 
     printf("\n\t\t*********** Transaction ************");       
-    printf("\n\n\t\tEnter the account id of the customer : ");
-    scanf("%d",&tr.id);
+    printf("\n\n\t\tEnter the account number of the customer : ");
+    scanf("%d",&tr.accountId);
     while (getAccountFromFile(old, &r, &u))
    {
 
-            if(r.id==tr.id)
+            if(r.accountId==tr.accountId)
             {   test=1;
                 if(strcasecmp(r.accountType,"fixed01")==0 || strcasecmp(r.accountType,"fixed02")==0 || strcasecmp(r.accountType,"fixed03")==0)
                 {
@@ -455,19 +449,19 @@ void transact(void)
                     r.balance,
                     r.accountType);             }
    }
-   fclose(old);
-   fclose(newrec);
-   remove(RECORDS);
-   rename("new.txt",RECORDS);
-   if(test!=1)
+   if(test==0)
    {
-       printf("\n\n\t\tRecord not found!!");
+       printf("\n\n\t\tRecord not found!!\n");
        stayOrReturnMain();
    }else
     {
         printf("\n\n\t\tInvalid!");
     stayOrReturnMain();
     }
+fclose(old);
+fclose(newrec);
+remove(RECORDS);
+rename("new.txt", RECORDS);
 
 }
 
@@ -488,12 +482,12 @@ void checkDet(void)
     system("clear");
     printf("\n\t\t******** Check the details of existing accounts *********\n");       
     
-        printf("\n\t\tEnter the account id : ");
-        scanf("%d",&ch.id);
+        printf("\n\t\tEnter the account number : ");
+        scanf("%d",&ch.accountId);
 
         while (getAccountFromFile(ptr, &r, &u))
         {
-            if(r.id==ch.id)
+            if(r.accountId==ch.accountId)
             {
                 test=1;
 
@@ -550,9 +544,9 @@ void checkDet(void)
         }
     
     fclose(ptr);
-     if(test!=1)
+     if(test==0)
         {   
-            printf("\n\n\t\tRecord not found!!\a\a\a");
+            printf("\n\n\t\tRecord not found!!\n");
             stayOrReturnMain();
         }
     else
@@ -588,14 +582,15 @@ void removeAcc(void)
     system("clear");
     printf("\n\t\t********** Remove Existing Account *8*********\n");       
 
-    printf("\n\n\t\tEnter the account id of the customer you want to delete : ");
-    scanf("%d",&rm.id);
+    printf("\n\n\t\tEnter the account number of the customer you want to delete : ");
+    scanf("%d",&rm.accountId);
+
     printf("\n\n\t\tEnter the username of the customer you want to delete : ");
     scanf("%s",ru.name);
     
     while (getAccountFromFile(old, &r, &u)) 
     {
-        if(r.id!=rm.id)
+        if(r.accountId!=rm.accountId)
         {
             fprintf(newrec, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n\n",
                     u.id,
@@ -658,10 +653,12 @@ void removeAcc(void)
 void transferAcc(void){
 
     int choice,test=0;
-    FILE *old,*newrec, *user;
+    FILE *old,*newrec, *user, *message;
     old=fopen(RECORDS,"r");
     newrec=fopen(USERS,"r");
     newrec=fopen("new.txt","w");
+    message=fopen("message.txt","w");
+
     struct User u;
     struct User cu;
     struct User bu;
@@ -679,12 +676,12 @@ void transferAcc(void){
 
     system("clear");
     printf("\n\t\t********** Change Account Owner ***********\n");       
-    printf("\n\n\t\tUser ID : ");
-    scanf("%d",&cr.id);
+    printf("\n\n\t\tAccount number : ");
+    scanf("%d",&cr.accountId);
  
     while(getAccountFromFile(old, &r, &u))
     {
-        if (r.id==cr.id) 
+        if (r.accountId==cr.accountId) 
         
         {   test=1;
             
@@ -709,7 +706,9 @@ void transferAcc(void){
 
 
             }
-             success(u);
+            
+            success(u);
+            fprintf(message, "You just owned a new account (Account Number :  %d) ", cr.accountId);
 
         }
         else
@@ -724,19 +723,40 @@ void transferAcc(void){
                     r.country,
                     r.phone,
                     r.balance,
-                    r.accountType);    }
+                    r.accountType);    
+
+    }
+    fclose(message);
     fclose(old);
     fclose(newrec);
     remove(RECORDS);
     rename("new.txt",RECORDS);
 
-if(test!=1)
+if(test==0)
 { 
-    printf("\nRecord not found!!\a\a\a");
+    printf("\nRecord not found!!\n");
     stayOrReturnMain();
             
 }
 
+}
+
+void message() {
+
+    FILE *fichier = fopen("messages.txt", "r");
+    if (fichier == NULL) {
+        printf("Erreur lors de l'ouverture du fichier.\n");
+        return;
+    }
+    
+    char message[100];
+    
+    printf(" Messages :\n");
+    while (fgets(message, sizeof(message), fichier)) {
+        printf("- %s", message);
+    }
+    
+    fclose(fichier);
 }
 
 void stayOrReturnInit(){
