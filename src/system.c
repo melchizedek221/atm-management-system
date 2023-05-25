@@ -513,41 +513,37 @@ void checkDet(void)
 
                 if(strcmp(r.accountType,"fixed1")==0)
                     {
-                        time=1.0;
-                        rate=9;
-                        intrst=(time * r.balance *rate)/100;
+                        rate=0.04/100;
+                        intrst = r.balance * rate ;
                         printf("\n\n\n\t\tYou will get $%.2f as interest on %d/%d/%d",intrst,r.deposit.month,r.deposit.day,r.deposit.year+1);
                     }
                 else if(strcmp(r.accountType,"fixed2")==0)
                     {
-                        time=2.0;
-                        rate=11;
+                        rate=0.05/100;
                         intrst=(time * r.balance *rate)/100;
                         printf("\n\n\n\t\tYou will get $%.2f as interest on %d/%d/%d",intrst,r.deposit.month,r.deposit.day,r.deposit.year+2);
 
                     }
                 else if(strcmp(r.accountType,"fixed3")==0)
                     {
-                        time=3.0;
-                        rate=13;
-                        intrst=(time * r.balance *rate)/100;
+                        rate=0.08/100;
+                        intrst=r.balance *rate;
                         printf("\n\n\n\t\tYou will get $%.2f as interest on %d/%d/%d",intrst,r.deposit.month,r.deposit.day,r.deposit.year+3);
 
                     }
                  else if(strcmp(r.accountType,"saving")==0)
                     {
-                        time=(1.0/12.0);
-                        rate=8;
-                        intrst=(time * r.balance *rate)/100;
-                        printf("\n\n\n\t\tYou will get $%.2f as interest on %d of every month",intrst,r.deposit.day);
+                        rate=0.07/100;
+                        intrst=r.balance *rate;
+                        printf("\n\n\n\t\tYou will get $%.2f as interest",intrst);
 
                      }
                  else if(strcmp(r.accountType,"current")==0)
                     {
 
-                        printf("\n\n\n\t\tYou will get no interest\a\a");
+                        printf("\n\n\n\t\tYou will not get interests because the account is of type current.\a\a");
 
-                     }
+                    }
 
             }
         }
