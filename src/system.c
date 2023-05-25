@@ -311,7 +311,6 @@ void updateAcc(void)
                     r.balance,
                     r.accountType);
 
-                success(u);
                 }
             else if(choice==2)
                 {
@@ -330,7 +329,6 @@ void updateAcc(void)
                     r.balance,
                     r.accountType);                
                      
-                success(u);
                 }
             else
                 {
@@ -360,6 +358,7 @@ fclose(old);
 fclose(newrec);
 remove(RECORDS);
 rename("new.txt", RECORDS);
+success(u);
 
 }
 
@@ -409,7 +408,6 @@ void transact(void)
                     r.phone,
                     r.balance,
                     r.accountType);                   
-                 success(u);
                 }
                 else
                 {
@@ -430,7 +428,6 @@ void transact(void)
                     r.balance,
                     r.accountType); 
                     
-                     success(u);                 
                 }
 
             }
@@ -462,6 +459,7 @@ fclose(old);
 fclose(newrec);
 remove(RECORDS);
 rename("new.txt", RECORDS);
+success(u);
 
 }
 
@@ -618,7 +616,6 @@ void removeAcc(void)
         else
         {
             test++;
-            success(u);
         }
 
     }
@@ -631,10 +628,12 @@ void removeAcc(void)
     remove(USERS);
     rename("new.txt",RECORDS);
     rename("new2.txt",USERS);
+    success(u);
+
 
     if(test==0)
     {
-        printf("\nRecord not found!!\a\a\a");
+        printf("\n\n\t\tRecord not found!!\a\a\a");
        stayOrReturnMain();
     }else
         {
@@ -653,11 +652,10 @@ void removeAcc(void)
 void transferAcc(void){
 
     int choice,test=0;
-    FILE *old,*newrec, *user, *message;
+    FILE *old,*newrec, *user;
     old=fopen(RECORDS,"r");
     newrec=fopen(USERS,"r");
     newrec=fopen("new.txt","w");
-    message=fopen("message.txt","w");
 
     struct User u;
     struct User cu;
@@ -704,11 +702,9 @@ void transferAcc(void){
                     r.balance,
                     r.accountType);
 
-
             }
             
-            success(u);
-            fprintf(message, "You just owned a new account (Account Number :  %d) ", cr.accountId);
+            //fprintf(message, "You just owned a new account (Account Number :  %d) ", cr.accountId);
 
         }
         else
@@ -731,6 +727,8 @@ void transferAcc(void){
     fclose(newrec);
     remove(RECORDS);
     rename("new.txt",RECORDS);
+    success(u);
+
 
 if(test==0)
 { 
@@ -739,24 +737,6 @@ if(test==0)
             
 }
 
-}
-
-void message() {
-
-    FILE *fichier = fopen("messages.txt", "r");
-    if (fichier == NULL) {
-        printf("Erreur lors de l'ouverture du fichier.\n");
-        return;
-    }
-    
-    char message[100];
-    
-    printf(" Messages :\n");
-    while (fgets(message, sizeof(message), fichier)) {
-        printf("- %s", message);
-    }
-    
-    fclose(fichier);
 }
 
 void stayOrReturnInit(){
