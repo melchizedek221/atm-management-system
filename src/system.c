@@ -99,7 +99,7 @@ int lastId(FILE* file) {
 }
 
 // function to check if the user name already exists
-void checkUsername(struct Record cr) {
+void check(struct Record cr) {
     
     FILE *fp = fopen(RECORDS, "r");
    
@@ -108,10 +108,10 @@ void checkUsername(struct Record cr) {
 
     while (getAccountFromFile(fp, &r, &u))
     {
-        if (cr.id==r.id)
+        if (cr.id==r.id || cr.accountId == r.accountId)
         {
             /* code */
-            printf("\n\t\t*** ✖This id already exists! ***\n");
+            printf("\n\t\t*** ✖This account already exists! ***\n");
                 add_invalid:
             printf("\n\n\n\t\tEnter 1 to go to the main menu and 0 to exit:");
             scanf("%d",&main_exit);
@@ -153,9 +153,17 @@ void createNewAcc(struct User u)
     printf("\n\n\t\tEnter your name : ");
     scanf("%s", r.userName);
     printf("\n\n\t\tEnter your Id : ");
-    scanf("%d", &r.id);
+    scanf("%d", &cr.id);
+    
+    check(cr);
+    r.id = cr.id;
+
     printf("\n\n\t\tEnter your account number : ");
-    scanf("%d", &r.accountId);
+    scanf("%d", &cr.accountId);
+    
+    check(cr);
+    cr.accountId = r.accountId;
+    
     printf("\n\n\t\tEnter your country : ");
     scanf("%s", r.country);
     printf("\n\n\t\tEnter your phone number : ");
@@ -165,12 +173,10 @@ void createNewAcc(struct User u)
     printf("\n\n\t\tChoose the type of account :\n\n\t\t\t-> saving\n\n\t\t\t-> current\n\n\t\t\t-> fixed01(for 1 year)\n\n\t\t\t-> fixed02(for 2 years)\n\n\t\t\t-> fixed03(for 3 years)\n\n\n\t\t\tEnter your choice : ");
     scanf("%s", r.accountType);
 
-   
     saveAccountToFile(pf, r, u);
 
     fclose(pf);
     fclose(pf1);
-
     success(u);
 }
 
@@ -232,11 +238,13 @@ void registration(struct User *u)
     scanf("%s", u->name);
     printf("\n\n\t\tEnter your user ID : ");
     scanf("%d", &cr.id);
-    checkUsername(cr);
-
+    
+    check(cr);
     r.id=cr.id;
+
     printf("\n\n\t\tEnter the account number : ");
     scanf("%d", &r.accountId);
+
     printf("\n\n\t\tEnter the country : ");
     scanf("%s", r.country);
     printf("\n\n\t\tEnter the phone number : ");
