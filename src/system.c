@@ -390,15 +390,15 @@ void transact(void)
    {
 
             if(r.accountId==tr.accountId)
-            {   test=1;
+            {   
+                test=1;
                 if(strcasecmp(r.accountType,"fixed01")==0 || strcasecmp(r.accountType,"fixed02")==0 || strcasecmp(r.accountType,"fixed03")==0)
                 {
-                    printf("\a\a\a\n\n\t\tYOU CANNOT DEPOSIT OR WITHDRAW CASH IN FIXED ACCOUNTS!!!!!");
-
+                printf("\a\a\a\n\n\t\tSorry you cannot make deposit or withdrawal in this kind of account!!!!!");
                 stayOrReturnMain();
                 }
 
-                printf("\n\n\t\tDo you want to\n\n\t\t\t1.Deposit\n\n\t\t\t2.Withdraw?\n\n\t\t\tEnter your choice : ");
+                printf("\n\n\t\tDo you want to\n\n\t\t\t1. Deposit\n\n\t\t\t2. Withdraw?\n\n\t\t\tEnter your choice : ");
                 scanf("%d",&choice);
                 if (choice==1)
                 {
