@@ -599,7 +599,7 @@ void removeAcc(void)
     
     while (getAccountFromFile(old, &r, &u)) 
     {
-        if(r.accountId!=rm.accountId)
+        if(r.accountId != rm.accountId)
         {
             fprintf(newrec, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n\n",
                     u.id,
@@ -715,8 +715,6 @@ void transferAcc(void){
 
             }
             
-            //fprintf(message, "You just owned a new account (Account Number :  %d) ", cr.accountId);
-
         }
         else
                 fprintf(newrec, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n\n",
@@ -741,12 +739,12 @@ void transferAcc(void){
     success(u);
 
 
-if(test==0)
-{ 
-    printf("\nRecord not found!!\n");
-    stayOrReturnMain();
+        if(test==0)
+        { 
+            printf("\nRecord not found!!\n");
+            stayOrReturnMain();
             
-}
+        }
 
 }
 
