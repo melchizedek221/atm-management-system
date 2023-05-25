@@ -108,7 +108,7 @@ void check(struct Record cr) {
 
     while (getAccountFromFile(fp, &r, &u))
     {
-        if (cr.id==r.id || cr.accountId == r.accountId)
+        if (cr.id==r.id || cr.accountId == r.accountId || strcmp(r.userName, cr.userName)==0)
         {
             /* code */
             printf("\n\t\t*** ✖This account already exists! ***\n");
@@ -163,7 +163,7 @@ void createNewAcc(struct User u)
     
     check(cr);
     cr.accountId = r.accountId;
-    
+
     printf("\n\n\t\tEnter your country : ");
     scanf("%s", r.country);
     printf("\n\n\t\tEnter your phone number : ");
@@ -233,7 +233,10 @@ void registration(struct User *u)
     printf("\n\n\t\tEnter today's date(mm/dd/yyyy) : ");
     scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
     printf("\n\n\t\tEnter your name : ");
-    scanf("%s", r.userName);
+    scanf("%s", cr.userName);
+    check(cr);
+    strcpy(cr.userName, r.userName);
+
     printf("\n\n\t\tEnter your username : ");
     scanf("%s", u->name);
     printf("\n\n\t\tEnter your user ID : ");
