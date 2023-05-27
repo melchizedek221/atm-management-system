@@ -98,7 +98,7 @@ int lastId(FILE* file) {
     return num_lines;
 }
 
-// function to check if the user name already exists
+// function to check if the id already exists
 void check(struct Record cr) {
     
     FILE *fp = fopen(RECORDS, "r");
@@ -108,7 +108,7 @@ void check(struct Record cr) {
 
     while (getAccountFromFile(fp, &r, &u))
     {
-        if (cr.id==r.id || cr.accountId == r.accountId || strcmp(r.userName, cr.userName)==0)
+        if (cr.id==r.id || cr.accountId == r.accountId)
         {
             /* code */
             printf("\n\t\t*** ✖This account already exists! ***\n");
@@ -133,6 +133,7 @@ void check(struct Record cr) {
     fclose(fp);
 }
 
+
 //Create a new account / register
 void createNewAcc(struct User u)
 {
@@ -141,25 +142,20 @@ void createNewAcc(struct User u)
     char userName[50];
     
     FILE *pf = fopen(RECORDS, "a+");
-    FILE *pf1 = fopen(USERS, "a+");
 
     system("clear");
 
+    getAccountFromFile(pf, &r, &u);
     u.id=lastId(pf);
 
     printf("\n\n\t\t================== New Record ==================\n");
     printf("\n\n\t\tEnter today's date(mm/dd/yyyy) : ");
     scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
-    printf("\n\n\t\tEnter your name : ");
-    scanf("%s", r.userName);
-    printf("\n\n\t\tEnter your Id : ");
-    scanf("%d", &cr.id);
-    
-    check(cr);
-    r.id = cr.id;
 
+    printf("\n\n\t\tEnter your name : ");
+    scanf("%d", r.userName);
     printf("\n\n\t\tEnter your account number : ");
-    scanf("%d", &cr.accountId);
+    scanf("%d", &r.accountId);
     
     check(cr);
     cr.accountId = r.accountId;
@@ -176,7 +172,6 @@ void createNewAcc(struct User u)
     saveAccountToFile(pf, r, u);
 
     fclose(pf);
-    fclose(pf1);
     success(u);
 }
 
@@ -217,6 +212,18 @@ void checkAllAccounts(struct User u)
     success(u);
 }
 
+void encryptPassword(char *password) {
+    int i = 0;
+    while (password[i] != '\0') {
+        if (password[i] >= 'A' && password[i] <= 'Z') {
+            password[i] = (password[i] - 'A' + 14) % 26 + 'A';
+        } else if (password[i] >= 'a' && password[i] <= 'z') {
+            password[i] = (password[i] - 'a' + 14) % 26 + 'a';
+        }
+        i++;
+    }
+}
+
 //Create a new account / register
 void registration(struct User *u)
 {
@@ -233,20 +240,18 @@ void registration(struct User *u)
     printf("\n\n\t\tEnter today's date(mm/dd/yyyy) : ");
     scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
     printf("\n\n\t\tEnter your name : ");
-    scanf("%s", cr.userName);
-    check(cr);
-    strcpy(cr.userName, r.userName);
-
+    scanf("%s", r.userName);
     printf("\n\n\t\tEnter your username : ");
     scanf("%s", u->name);
     printf("\n\n\t\tEnter your user ID : ");
     scanf("%d", &cr.id);
-    
-    check(cr);
-    r.id=cr.id;
 
     printf("\n\n\t\tEnter the account number : ");
-    scanf("%d", &r.accountId);
+    scanf("%d", &cr.accountId);
+
+    check(cr);
+    r.id=cr.id;
+    cr.accountId = r.accountId;
 
     printf("\n\n\t\tEnter the country : ");
     scanf("%s", r.country);
@@ -258,6 +263,7 @@ void registration(struct User *u)
     scanf("%s", r.accountType);
     printf("\n\n\t\tEnter your password : ");
     scanf("%s", u->password);
+    encryptPassword(u->password);
 
     saveAccountToFile(pf, r, *u);
     saveUsersToFile(pf1, *u, r);
@@ -610,7 +616,7 @@ void removeAcc(void)
                     r.balance,
                     r.accountType); 
 
-        }
+        } else test++;
 
         fscanf(user, "%d %s %s", &r.id, u.name, u.password);
         if (strcmp(ru.name, u.name)!=0)
@@ -659,15 +665,20 @@ void removeAcc(void)
 void transferAcc(void){
 
     int choice,test=0;
-    FILE *old,*newrec, *user;
+    FILE *old,*newrec, *user, *newuser;
     old=fopen(RECORDS,"r");
-    newrec=fopen(USERS,"r");
+    user=fopen(USERS,"r");
     newrec=fopen("new.txt","w");
+    newuser=fopen("new2.txt","w");
+
+    
+    const char* message = "Transfert de compte réussi";
+
 
     struct User u;
     struct User cu;
     struct User bu;
-
+    struct Record cr;
 
 
         if (old == NULL) {
@@ -691,8 +702,10 @@ void transferAcc(void){
         {   test=1;
             
             system("clear");
-            printf("\n\t\t******** Change Account Owner *********\n");       
-            printf("\n\n\n\t\t\tEnter the name of reciever : ");
+            printf("\n\t\t******** Change Account Owner *********\n"); 
+            printf("\n\n\t\tEnter your username : ");
+            scanf("%s",bu.name);      
+            printf("\n\n\t\tEnter the username of reciever : ");
             scanf("%s",cr.userName);
 
             {
@@ -710,7 +723,6 @@ void transferAcc(void){
                     r.accountType);
 
             }
-            
         }
         else
                 fprintf(newrec, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n\n",
@@ -726,12 +738,30 @@ void transferAcc(void){
                     r.balance,
                     r.accountType);    
 
+            fscanf(user, "%d %s %s", &r.id, u.name, u.password);
+        if (strcmp(bu.name, u.name)!=0)
+        {
+            fprintf(newuser, "%d %s %s \n\n",
+                    r.id,
+                    u.name,
+                    u.password);  
+        }
+        else
+        {
+            test++;
+        }
+
     }
-    fclose(message);
     fclose(old);
+    fclose(newuser);
+    fclose(user);
     fclose(newrec);
     remove(RECORDS);
+    remove(USERS);
+
     rename("new.txt",RECORDS);
+    rename("new2.txt",USERS);
+
     success(u);
 
 
@@ -761,6 +791,7 @@ void stayOrReturnInit(){
 }
 
 void stayOrReturnMain(){
+
     struct User u;
     edit_invalid:
               printf("\n\t\tEnter 0 to return to main menu and 1 to Exit : ");
@@ -775,3 +806,4 @@ void stayOrReturnMain(){
                     {printf("\n\t\t************ Invalid! ***************\a");
                     goto edit_invalid;}
 }
+
