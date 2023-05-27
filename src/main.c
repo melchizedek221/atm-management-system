@@ -6,16 +6,17 @@ void mainMenu(struct User u)
     struct Record r;
 
     system("clear");
-    printf("\n\n\t\t=========================== ATM ============================\n");
-    printf("\n\t\t******* Feel free to choose one of the options below *******\n");
-    printf("\n\t\t\t\t[1]- Create a new account\n");
-    printf("\n\t\t\t\t[2]- Update account information\n");
-    printf("\n\t\t\t\t[3]- Check accounts\n");
-    printf("\n\t\t\t\t[4]- Check list of owned account\n");
-    printf("\n\t\t\t\t[5]- Make Transaction\n");
-    printf("\n\t\t\t\t[6]- Remove existing account\n");
-    printf("\n\t\t\t\t[7]- Transfer ownership\n");
-    printf("\n\t\t\t\t[8]- Exit\n");
+    printf("\n\n\t\t==================== ATM ====================\n");
+    printf("\n\t\t**Feel free to choose one of the options below**\n");
+    printf("\n\t\t\t[1]- Create a new account\n");
+    printf("\n\t\t\t[2]- Update account information\n");
+    printf("\n\t\t\t[3]- Check accounts\n");
+    printf("\n\t\t\t[4]- Check list of owned account\n");
+    printf("\n\t\t\t[5]- Make Transaction\n");
+    printf("\n\t\t\t[6]- Remove existing account\n");
+    printf("\n\t\t\t[7]- Transfer ownership\n");
+    printf("\n\t\t\t[8]- Exit\n");
+    printf("\n\t\t\tYour choice : ");
     scanf("%d", &option);
 
     switch (option)

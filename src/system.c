@@ -148,10 +148,9 @@ void createNewAcc(struct User u)
     getAccountFromFile(pf, &r, &u);
     u.id=lastId(pf);
 
-    printf("\n\n\t\t================== New Record ==================\n");
+    printf("\n\n\t\t================== NEW-RECORD ==================\n");
     printf("\n\n\t\tEnter today's date(mm/dd/yyyy) : ");
     scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
-
     printf("\n\n\t\tEnter your name : ");
     scanf("%d", r.userName);
     printf("\n\n\t\tEnter your account number : ");
@@ -168,6 +167,12 @@ void createNewAcc(struct User u)
     scanf("%lf", &r.balance);
     printf("\n\n\t\tChoose the type of account :\n\n\t\t\t-> saving\n\n\t\t\t-> current\n\n\t\t\t-> fixed01(for 1 year)\n\n\t\t\t-> fixed02(for 2 years)\n\n\t\t\t-> fixed03(for 3 years)\n\n\n\t\t\tEnter your choice : ");
     scanf("%s", r.accountType);
+
+    if (strcmp(r.accountType , "saving" != 0) || strcmp(r.accountType , "current" != 0)|| strcmp(r.accountType , "fixed01" != 0) || strcmp(r.accountType , "fixed02" != 0)){
+        printf("\n\n\t\tPlease choose one of the options below or check your choice");
+        printf("\n\n\t\tChoose the type of account :\n\n\t\t\t-> saving\n\n\t\t\t-> current\n\n\t\t\t-> fixed01(for 1 year)\n\n\t\t\t-> fixed02(for 2 years)\n\n\t\t\t-> fixed03(for 3 years)\n\n\n\t\t\tEnter your choice : ");
+    scanf("%s", r.accountType);
+    }
 
     saveAccountToFile(pf, r, u);
 
@@ -259,8 +264,35 @@ void registration(struct User *u)
     scanf("%d", &r.phone);
     printf("\n\n\t\tEnter amount to deposit : $");
     scanf("%lf", &r.balance);
-    printf("\n\n\t\tChoose the type of account :\n\n\t\t\t-> saving\n\n\t\t\t-> current\n\n\t\t\t-> fixed01(for 1 year)\n\n\t\t\t-> fixed02(for 2 years)\n\n\t\t\t-> fixed03(for 3 years)\n\n\n\t\t\tEnter your choice : ");
-    scanf("%s", r.accountType);
+    printf("\n\n\t\tChoose the type of account :\n\n\t\t\t1. Saving\n\n\t\t\t2. Current\n\n\t\t\t3. Fixed01 (for 1 year)\n\n\t\t\t4. Fixed02 (for 2 years)\n\n\t\t\t5. Fixed03 (for 3 years)\n\n\n");
+
+    int choice;
+        do {
+    printf("\t\t\tEnter your choice (1-5): ");
+    scanf("%d", &choice);
+
+    switch (choice) {
+        case 1:
+            strcpy(r.accountType, "saving");
+            break;
+        case 2:
+            strcpy(r.accountType, "current");
+            break;
+        case 3:
+            strcpy(r.accountType, "fixed01");
+            break;
+        case 4:
+            strcpy(r.accountType, "fixed02");
+            break;
+        case 5:
+            strcpy(r.accountType, "fixed03");
+            break;
+        default:
+            printf("\n\t\t*** ✖ Invalid choice! Please enter a valid option ***\n");
+            break;
+    }
+    } while (choice < 1 || choice > 5);
+
     printf("\n\n\t\tEnter your password : ");
     scanf("%s", u->password);
     encryptPassword(u->password);
