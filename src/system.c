@@ -156,9 +156,9 @@ void createNewAcc(struct User u)
     printf("\n\n\t\tEnter today's date(mm/dd/yyyy) : ");
     scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
     printf("\n\n\t\tEnter your name : ");
-    scanf("%d", r.userName);
+    scanf("%s", r.userName);
     printf("\n\n\t\tEnter your account number : ");
-    scanf("%s", &r.accountId);
+    scanf("%d", &r.accountId);
     
     check(cr);
     cr.accountId = r.accountId;
