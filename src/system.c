@@ -4,11 +4,6 @@
 #define FILENAME_SIZE 1024
 #define MAX_LINE 2048
 
-// Codes d'échappement ANSI pour les couleurs
-#define ANSI_COLOR_RESET "\033[0m"
-#define ANSI_COLOR_RED "\033[1;31m"
-#define ANSI_COLOR_GREEN "\033[1;32m"
-
 const char *RECORDS = "./data/records.txt";
 const char *USERS = "./data/users.txt";
 

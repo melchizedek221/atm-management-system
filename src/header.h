@@ -1,6 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <unistd.h>
+#include <sys/types.h>
+
+// Codes d'échappement ANSI pour les couleurs
+#define ANSI_COLOR_RESET "\033[0m"
+#define ANSI_COLOR_RED "\033[1;31m"
+#define ANSI_COLOR_GREEN "\033[1;32m"
 
 struct Date
 {
@@ -47,4 +54,5 @@ void removeAcc(void);
 void transferAcc(void);
 void stayOrReturnMain();
 void stayOrReturnInit();
-void message();
+void sendMessage(struct Record cr, const char* message);
+void encryptPassword(char *password);
