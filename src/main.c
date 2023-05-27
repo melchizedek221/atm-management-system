@@ -117,7 +117,7 @@ void initMenu(struct User *u)
             break;
         default:
             system("afplay /System/Library/Sounds/Ping.aiff");
-            printf(ANSI_COLOR_RED"\n\t\t*** Insert a valid operation! ***\n"ANSI_COLOR_RESET);
+            printf(ANSI_COLOR_RED"\n\t\t******* Insert a valid operation! ******\n"ANSI_COLOR_RESET);
         }
     }
 };
