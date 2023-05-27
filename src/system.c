@@ -4,6 +4,11 @@
 #define FILENAME_SIZE 1024
 #define MAX_LINE 2048
 
+// Codes d'échappement ANSI pour les couleurs
+#define ANSI_COLOR_RESET "\033[0m"
+#define ANSI_COLOR_RED "\033[1;31m"
+#define ANSI_COLOR_GREEN "\033[1;32m"
+
 const char *RECORDS = "./data/records.txt";
 const char *USERS = "./data/users.txt";
 
@@ -59,9 +64,9 @@ void saveUsersToFile(FILE *ptr, struct User u, struct Record r)
 void success(struct User u)
 {
     int option;
-    printf("\n\n\t\t✔ Success!\n\n");
+    printf(ANSI_COLOR_GREEN "\n\n\t\t✔ Success!\n\n" ANSI_COLOR_RESET);
 invalid:
-    printf("\n\t\tEnter 1 to go to the main menu and 0 to exit!\n");
+    printf(ANSI_COLOR_RED "\n\t\tEnter 1 to go to the main menu and 0 to exit : \n" ANSI_COLOR_RESET);
     scanf("%d", &option);
     system("clear");
     if (option == 1)
@@ -74,7 +79,7 @@ invalid:
     }
     else
     {
-        printf("\n\t\tInsert a valid operation!\n");
+        printf(ANSI_COLOR_RED"\n\t\tInsert a valid operation!\n"ANSI_COLOR_RESET);
         goto invalid;
     }
 }
@@ -111,9 +116,9 @@ void check(struct Record cr) {
         if (cr.id==r.id || cr.accountId == r.accountId)
         {
             /* code */
-            printf("\n\t\t*** ✖This account already exists! ***\n");
+            printf(ANSI_COLOR_RED"\n\t\t*** ✖This account already exists! ***\n"ANSI_COLOR_RESET);
                 add_invalid:
-            printf("\n\n\n\t\tEnter 1 to go to the main menu and 0 to exit:");
+            printf(ANSI_COLOR_RED"\n\n\n\t\tEnter 1 to go to the main menu and 0 to exit : "ANSI_COLOR_RESET);
             scanf("%d",&main_exit);
             
             system("clear"); 
@@ -123,7 +128,7 @@ void check(struct Record cr) {
             exit(1);
     else
         {
-            printf("\n\t\t************ Invalid! **************\a");
+            printf(ANSI_COLOR_RED"\n\t\t************ Invalid! **************\a"ANSI_COLOR_RESET);
             goto add_invalid;
         }
         }
@@ -132,7 +137,6 @@ void check(struct Record cr) {
     }
     fclose(fp);
 }
-
 
 //Create a new account / register
 void createNewAcc(struct User u)
@@ -167,12 +171,34 @@ void createNewAcc(struct User u)
     scanf("%lf", &r.balance);
     printf("\n\n\t\tChoose the type of account :\n\n\t\t\t-> saving\n\n\t\t\t-> current\n\n\t\t\t-> fixed01(for 1 year)\n\n\t\t\t-> fixed02(for 2 years)\n\n\t\t\t-> fixed03(for 3 years)\n\n\n\t\t\tEnter your choice : ");
     scanf("%s", r.accountType);
+    printf("\n\n\t\tChoose the type of account :\n\n\t\t\t1. Saving\n\n\t\t\t2. Current\n\n\t\t\t3. Fixed01 (for 1 year)\n\n\t\t\t4. Fixed02 (for 2 years)\n\n\t\t\t5. Fixed03 (for 3 years)\n\n\n");
 
-    if (strcmp(r.accountType , "saving" != 0) || strcmp(r.accountType , "current" != 0)|| strcmp(r.accountType , "fixed01" != 0) || strcmp(r.accountType , "fixed02" != 0)){
-        printf("\n\n\t\tPlease choose one of the options below or check your choice");
-        printf("\n\n\t\tChoose the type of account :\n\n\t\t\t-> saving\n\n\t\t\t-> current\n\n\t\t\t-> fixed01(for 1 year)\n\n\t\t\t-> fixed02(for 2 years)\n\n\t\t\t-> fixed03(for 3 years)\n\n\n\t\t\tEnter your choice : ");
-    scanf("%s", r.accountType);
+    int choice;
+        do {
+    printf("\t\t\tEnter your choice (1-5): ");
+    scanf("%d", &choice);
+
+    switch (choice) {
+        case 1:
+            strcpy(r.accountType, "saving");
+            break;
+        case 2:
+            strcpy(r.accountType, "current");
+            break;
+        case 3:
+            strcpy(r.accountType, "fixed01");
+            break;
+        case 4:
+            strcpy(r.accountType, "fixed02");
+            break;
+        case 5:
+            strcpy(r.accountType, "fixed03");
+            break;
+        default:
+            printf("\n\t\t*** ✖ Invalid choice! Please enter a valid option ***\n");
+            break;
     }
+    } while (choice < 1 || choice > 5);
 
     saveAccountToFile(pf, r, u);
 
@@ -288,7 +314,7 @@ void registration(struct User *u)
             strcpy(r.accountType, "fixed03");
             break;
         default:
-            printf("\n\t\t*** ✖ Invalid choice! Please enter a valid option ***\n");
+            printf(ANSI_COLOR_RED"\n\t\t*** ✖ Invalid choice! Please enter a valid option ***\n"ANSI_COLOR_RESET);
             break;
     }
     } while (choice < 1 || choice > 5);
@@ -345,7 +371,7 @@ void updateAcc(void)
             printf("\n\t\t******** Update Account Information *********\n");                
             if(choice==1)
                 {
-                    printf("\n\n\t\tEnter the new country : ");
+                printf("\n\n\t\tEnter the new country : ");
                 scanf("%s",cr.country);
                 fprintf(newrec, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n\n",
                     u.id,
@@ -399,7 +425,7 @@ void updateAcc(void)
 
     if(test==0) 
     {  
-        printf("\n\t\tRecord not found!!\a\a\a\n");
+        printf(ANSI_COLOR_RED"\n\t\tRecord not found!!\a\a\a\n"ANSI_COLOR_RESET);
         remove("new.txt");
         stayOrReturnMain();
     }
@@ -432,7 +458,7 @@ void transact(void)
                 test=1;
                 if(strcasecmp(r.accountType,"fixed01")==0 || strcasecmp(r.accountType,"fixed02")==0 || strcasecmp(r.accountType,"fixed03")==0)
                 {
-                printf("\a\a\a\n\n\t\tSorry you cannot make deposit or withdrawal in this kind of account!!!!!");
+                printf(ANSI_COLOR_RED"\a\a\a\n\n\t\tSorry you cannot make deposit or withdrawal in this kind of account!!!!!"ANSI_COLOR_RESET);
                 stayOrReturnMain();
                 }
 
@@ -497,11 +523,11 @@ void transact(void)
    }
    if(test==0)
    {
-       printf("\n\n\t\tRecord not found!!\n");
+       printf(ANSI_COLOR_RED"\n\n\t\tRecord not found!!\n"ANSI_COLOR_RESET);
        stayOrReturnMain();
    }else
     {
-        printf("\n\n\t\tInvalid!");
+    printf(ANSI_COLOR_RED"\n\n\t\tInvalid!"ANSI_COLOR_RESET);
     stayOrReturnMain();
     }
 fclose(old);
@@ -589,11 +615,11 @@ void checkDet(void)
     fclose(ptr);
      if(test==0)
         {   
-            printf("\n\n\t\tRecord not found!!\n");
+            printf(ANSI_COLOR_RED"\n\n\t\tRecord not found!!\n"ANSI_COLOR_RESET);
             stayOrReturnMain();
         }
     else
-        {printf("\n\n\t\tEnter 1 to go to the main menu and 0 to exit:");
+        {printf(ANSI_COLOR_RED"\n\n\t\tEnter 1 to go to the main menu and 0 to exit : "ANSI_COLOR_RESET);
         scanf("%d",&main_exit);}
         if (main_exit==1)
         {
@@ -678,12 +704,12 @@ void removeAcc(void)
 
     if(test==0)
     {
-        printf("\n\n\t\tRecord not found!!\a\a\a");
+        printf(ANSI_COLOR_RED"\n\n\t\tRecord not found!!\a\a\a"ANSI_COLOR_RESET);
        stayOrReturnMain();
     }else
         {
-            printf("\n\n\t\tInvalid!\a");
-        printf("\nEnter 1 to go to the main menu and 0 to exit:");
+        printf(ANSI_COLOR_RED"\n\n\t\tInvalid!\a"ANSI_COLOR_RESET);
+        printf(ANSI_COLOR_RED"\n\t\tEnter 1 to go to the main menu and 0 to exit : "ANSI_COLOR_RESET);
         scanf("%d",&main_exit);
         if (main_exit==1){
             mainMenu(u);
@@ -702,9 +728,6 @@ void transferAcc(void){
     user=fopen(USERS,"r");
     newrec=fopen("new.txt","w");
     newuser=fopen("new2.txt","w");
-
-    
-    const char* message = "Transfert de compte réussi";
 
 
     struct User u;
@@ -799,7 +822,7 @@ void transferAcc(void){
 
         if(test==0)
         { 
-            printf("\nRecord not found!!\n");
+            printf(ANSI_COLOR_RED"\n\t\tRecord not found!!\n"ANSI_COLOR_RESET);
             stayOrReturnMain();
             
         }
@@ -809,16 +832,16 @@ void transferAcc(void){
 void stayOrReturnInit(){
     struct User u;
     edit_invalid:
-              printf("\n\t\tEnter 0 to return to main menu and 1 to Exit:");
+              printf(ANSI_COLOR_RED"\n\t\tEnter 1 to return to main menu and 0 to Exit : "ANSI_COLOR_RESET);
               scanf("%d",&main_exit);
                
-                 if (main_exit==0)
+                 if (main_exit==1)
 
                     initMenu(&u);
-                else if (main_exit==1)
+                else if (main_exit==0)
                     exit(1);
                 else
-                    {printf("\n\t\t************ Invalid! ***************\a");
+                    {printf(ANSI_COLOR_RED"\n\t\t************ Invalid! ***************\a"ANSI_COLOR_RESET);
                     goto edit_invalid;}
 }
 
@@ -826,16 +849,16 @@ void stayOrReturnMain(){
 
     struct User u;
     edit_invalid:
-              printf("\n\t\tEnter 0 to return to main menu and 1 to Exit : ");
+              printf(ANSI_COLOR_RED"\n\t\tEnter 1 to return to main menu and 0 to Exit : "ANSI_COLOR_RESET);
               scanf("%d",&main_exit);
                
-                 if (main_exit==0)
+                 if (main_exit==1)
 
                     mainMenu(u);
-                else if (main_exit==1)
+                else if (main_exit==0)
                     exit(2);
                 else
-                    {printf("\n\t\t************ Invalid! ***************\a");
+                    {printf(ANSI_COLOR_RED"\n\t\t************ Invalid! ***************\a"ANSI_COLOR_RESET);
                     goto edit_invalid;}
 }
 
