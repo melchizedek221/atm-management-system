@@ -63,6 +63,7 @@ void mainMenu(struct User u)
         break;
 
     default:
+        system("afplay /System/Library/Sounds/Ping.aiff");
         printf(ANSI_COLOR_RED"\n\n\t\tInvalid operation!\n"ANSI_COLOR_RESET);
     }
 };
@@ -90,14 +91,12 @@ void initMenu(struct User *u)
             if (strcmp(u->password, getPassword(*u)) == 0)
             {
             system("afplay /System/Library/Sounds/Pop.aiff");
-
-                printf("\n\n\t\t\t******* Password Match! Welcome %s ******" , u->name);
+            printf("\n\n\t\t\t******* Password Match! Welcome %s ******" , u->name);
 
             }
             else
             {
                 system("afplay /System/Library/Sounds/Ping.aiff");
-
                 printf(ANSI_COLOR_RED"\n\t\t******** Wrong password or User Name *********\n"ANSI_COLOR_RESET);
                 stayOrReturnInit();
 
@@ -117,6 +116,7 @@ void initMenu(struct User *u)
             exit(1);
             break;
         default:
+            system("afplay /System/Library/Sounds/Ping.aiff");
             printf(ANSI_COLOR_RED"\n\t\t*** Insert a valid operation! ***\n"ANSI_COLOR_RESET);
         }
     }
