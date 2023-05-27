@@ -89,7 +89,7 @@ void initMenu(struct User *u)
             encryptPassword(u->password);
             if (strcmp(u->password, getPassword(*u)) == 0)
             {
-                printf(ANSI_COLOR_GREEN"\n\n\t\t\t******* Password Match! Welcome %s ******" , u->name, ANSI_COLOR_RESET);
+                printf("\n\n\t\t\t******* Password Match! Welcome %s ******" , u->name);
 
             }
             else
