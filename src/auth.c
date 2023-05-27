@@ -1,4 +1,3 @@
-#include <termios.h>
 #include "header.h"
 
 void loginMenu(char a[50], char pass[50])
@@ -6,7 +5,7 @@ void loginMenu(char a[50], char pass[50])
     struct termios oflags, nflags;
 
     system("clear");
-    printf("\n\n\t\t================*Bank*Management*System*================");
+    printf("\n\n\t\t==========*Bank*Management*System*==========");
     printf("\n\n\t\tUser Login : ");
     scanf("%s", a);
 
@@ -40,7 +39,7 @@ const char *getPassword(struct User u)
 
     if ((fp = fopen("./data/users.txt", "r")) == NULL)
     {
-        printf("Error! opening file");
+        printf("\n\t\tError! opening file");
         exit(1);
     }
 
@@ -55,5 +54,5 @@ const char *getPassword(struct User u)
     }
 
     fclose(fp);
-    return "no user found";
+    return "\n\n\t\tno user found";
 }

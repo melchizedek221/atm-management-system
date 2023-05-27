@@ -89,11 +89,15 @@ void initMenu(struct User *u)
             encryptPassword(u->password);
             if (strcmp(u->password, getPassword(*u)) == 0)
             {
+            system("afplay /System/Library/Sounds/Pop.aiff");
+
                 printf("\n\n\t\t\t******* Password Match! Welcome %s ******" , u->name);
 
             }
             else
             {
+                system("afplay /System/Library/Sounds/Ping.aiff");
+
                 printf(ANSI_COLOR_RED"\n\t\t******** Wrong password or User Name *********\n"ANSI_COLOR_RESET);
                 stayOrReturnInit();
 

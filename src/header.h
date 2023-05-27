@@ -3,6 +3,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
+#include <termios.h>
+
 
 // Codes d'échappement ANSI pour les couleurs
 #define ANSI_COLOR_RESET "\033[0m"

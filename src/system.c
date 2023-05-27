@@ -59,6 +59,7 @@ void saveUsersToFile(FILE *ptr, struct User u, struct Record r)
 void success(struct User u)
 {
     int option;
+    system("afplay /System/Library/Sounds/Pop.aiff");
     printf(ANSI_COLOR_GREEN "\n\n\t\t✔ Success!\n\n" ANSI_COLOR_RESET);
 invalid:
     printf(ANSI_COLOR_RED "\n\t\tEnter 1 to go to the main menu and 0 to exit : \n" ANSI_COLOR_RESET);
@@ -74,6 +75,7 @@ invalid:
     }
     else
     {
+        system("afplay /System/Library/Sounds/Ping.aiff");
         printf(ANSI_COLOR_RED"\n\t\tInsert a valid operation!\n"ANSI_COLOR_RESET);
         goto invalid;
     }
@@ -111,6 +113,7 @@ void check(struct Record cr) {
         if (cr.id==r.id || cr.accountId == r.accountId)
         {
             /* code */
+            system("afplay /System/Library/Sounds/Ping.aiff");
             printf(ANSI_COLOR_RED"\n\t\t*** ✖This account already exists! ***\n"ANSI_COLOR_RESET);
                 add_invalid:
             printf(ANSI_COLOR_RED"\n\n\n\t\tEnter 1 to go to the main menu and 0 to exit : "ANSI_COLOR_RESET);
@@ -123,12 +126,11 @@ void check(struct Record cr) {
             exit(1);
     else
         {
-            printf(ANSI_COLOR_RED"\n\t\t************ Invalid! **************\a"ANSI_COLOR_RESET);
+            system("afplay /System/Library/Sounds/Ping.aiff");
+            printf(ANSI_COLOR_RED"\n\t\t************ Invalid! **************\n"ANSI_COLOR_RESET);
             goto add_invalid;
         }
         }
-        
-
     }
     fclose(fp);
 }
@@ -190,6 +192,7 @@ void createNewAcc(struct User u)
             strcpy(r.accountType, "fixed03");
             break;
         default:
+            system("afplay /System/Library/Sounds/Ping.aiff");
             printf("\n\t\t*** ✖ Invalid choice! Please enter a valid option ***\n");
             break;
     }
@@ -254,6 +257,8 @@ void encryptPassword(char *password) {
 void registration(struct User *u)
 {
     struct Record r;
+    struct termios oflags, nflags;
+
     
     FILE *pf = fopen(RECORDS, "a+");
     FILE *pf1 = fopen(USERS, "a+");
@@ -309,13 +314,33 @@ void registration(struct User *u)
             strcpy(r.accountType, "fixed03");
             break;
         default:
+            system("afplay /System/Library/Sounds/Ping.aiff");
             printf(ANSI_COLOR_RED"\n\t\t*** ✖ Invalid choice! Please enter a valid option ***\n"ANSI_COLOR_RESET);
             break;
     }
     } while (choice < 1 || choice > 5);
 
-    printf("\n\n\t\tEnter your password : ");
+    // disabling echo
+    tcgetattr(fileno(stdin), &oflags);
+    nflags = oflags;
+    nflags.c_lflag &= ~ECHO;
+    nflags.c_lflag |= ECHONL;
+
+    if (tcsetattr(fileno(stdin), TCSANOW, &nflags) != 0)
+    {
+        perror("tcsetattr");
+        return exit(1);
+    }
+    printf("\n\n\t\tEnter the password to login : ");
     scanf("%s", u->password);
+
+    // restore terminal
+    if (tcsetattr(fileno(stdin), TCSANOW, &oflags) != 0)
+    {
+        perror("tcsetattr");
+        return exit(1);
+    }
+
     encryptPassword(u->password);
 
     saveAccountToFile(pf, r, *u);
@@ -420,7 +445,8 @@ void updateAcc(void)
 
     if(test==0) 
     {  
-        printf(ANSI_COLOR_RED"\n\t\tRecord not found!!\a\a\a\n"ANSI_COLOR_RESET);
+        system("afplay /System/Library/Sounds/Ping.aiff");
+        printf(ANSI_COLOR_RED"\n\t\tRecord not found!!\n\n\n\n"ANSI_COLOR_RESET);
         remove("new.txt");
         stayOrReturnMain();
     }
@@ -453,7 +479,8 @@ void transact(void)
                 test=1;
                 if(strcasecmp(r.accountType,"fixed01")==0 || strcasecmp(r.accountType,"fixed02")==0 || strcasecmp(r.accountType,"fixed03")==0)
                 {
-                printf(ANSI_COLOR_RED"\a\a\a\n\n\t\tSorry you cannot make deposit or withdrawal in this kind of account!!!!!"ANSI_COLOR_RESET);
+                system("afplay /System/Library/Sounds/Ping.aiff");
+                printf(ANSI_COLOR_RED"\n\n\n\n\n\t\tSorry you cannot make deposit or withdrawal in this kind of account!!!!!"ANSI_COLOR_RESET);
                 stayOrReturnMain();
                 }
 
@@ -518,10 +545,12 @@ void transact(void)
    }
    if(test==0)
    {
+       system("afplay /System/Library/Sounds/Ping.aiff");
        printf(ANSI_COLOR_RED"\n\n\t\tRecord not found!!\n"ANSI_COLOR_RESET);
        stayOrReturnMain();
    }else
     {
+    system("afplay /System/Library/Sounds/Ping.aiff");
     printf(ANSI_COLOR_RED"\n\n\t\tInvalid!"ANSI_COLOR_RESET);
     stayOrReturnMain();
     }
@@ -600,7 +629,7 @@ void checkDet(void)
                  else if(strcmp(r.accountType,"current")==0)
                     {
 
-                        printf("\n\n\n\t\tYou will not get interests because the account is of type current.\a\a");
+                        printf("\n\n\n\t\tYou will not get interests because the account is of type current.\n\n");
 
                     }
 
@@ -609,7 +638,8 @@ void checkDet(void)
     
     fclose(ptr);
      if(test==0)
-        {   
+        {  
+            system("afplay /System/Library/Sounds/Ping.aiff");
             printf(ANSI_COLOR_RED"\n\n\t\tRecord not found!!\n"ANSI_COLOR_RESET);
             stayOrReturnMain();
         }
@@ -698,12 +728,14 @@ void removeAcc(void)
 
 
     if(test==0)
-    {
-        printf(ANSI_COLOR_RED"\n\n\t\tRecord not found!!\a\a\a"ANSI_COLOR_RESET);
+    {               
+         system("afplay /System/Library/Sounds/Ping.aiff");
+        printf(ANSI_COLOR_RED"\n\n\t\tRecord not found!!\n\n\n"ANSI_COLOR_RESET);
        stayOrReturnMain();
     }else
         {
-        printf(ANSI_COLOR_RED"\n\n\t\tInvalid!\a"ANSI_COLOR_RESET);
+        system("afplay /System/Library/Sounds/Ping.aiff");
+        printf(ANSI_COLOR_RED"\n\n\t\tInvalid!\n"ANSI_COLOR_RESET);
         printf(ANSI_COLOR_RED"\n\t\tEnter 1 to go to the main menu and 0 to exit : "ANSI_COLOR_RESET);
         scanf("%d",&main_exit);
         if (main_exit==1){
@@ -817,6 +849,7 @@ void transferAcc(void){
 
         if(test==0)
         { 
+            system("afplay /System/Library/Sounds/Ping.aiff");
             printf(ANSI_COLOR_RED"\n\t\tRecord not found!!\n"ANSI_COLOR_RESET);
             stayOrReturnMain();
             
@@ -836,7 +869,9 @@ void stayOrReturnInit(){
                 else if (main_exit==0)
                     exit(1);
                 else
-                    {printf(ANSI_COLOR_RED"\n\t\t************ Invalid! ***************\a"ANSI_COLOR_RESET);
+                    {
+                    system("afplay /System/Library/Sounds/Ping.aiff");
+                    printf(ANSI_COLOR_RED"\n\t\t************ Invalid! ***************\n\n"ANSI_COLOR_RESET);
                     goto edit_invalid;}
 }
 
@@ -853,7 +888,9 @@ void stayOrReturnMain(){
                 else if (main_exit==0)
                     exit(2);
                 else
-                    {printf(ANSI_COLOR_RED"\n\t\t************ Invalid! ***************\a"ANSI_COLOR_RESET);
+                    {
+                system("afplay /System/Library/Sounds/Ping.aiff");
+                    printf(ANSI_COLOR_RED"\n\t\t************ Invalid! ***************\n\n"ANSI_COLOR_RESET);
                     goto edit_invalid;}
 }
 
