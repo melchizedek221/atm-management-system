@@ -155,7 +155,7 @@ void createNewAcc(struct User u)
     printf("\n\n\t\tEnter your name : ");
     scanf("%d", r.userName);
     printf("\n\n\t\tEnter your account number : ");
-    scanf("%d", &r.accountId);
+    scanf("%s", &r.accountId);
     
     check(cr);
     cr.accountId = r.accountId;
@@ -204,7 +204,7 @@ void checkAllAccounts(struct User u)
                    r.balance,
                    r.accountType);
         }else{
-                printf("\t\t No match ");
+                printf("\t\t\nNo match ");
 
         }
     }
