@@ -175,13 +175,13 @@ void createNewAcc(struct User u)
     struct Record r;
     struct Record cr;
     char userName[50];
-    
+
     FILE *pf = fopen(RECORDS, "a+");
 
     system("clear");
 
     getAccountFromFile(pf, &r, &u);
-    u.id=lastId(pf);
+    u.id = lastId(pf);
 
     printf("\n\n\t\t================== NEW-RECORD ==================\n");
     printf("\n\n\t\tEnter today's date(mm/dd/yyyy) : ");
@@ -190,7 +190,7 @@ void createNewAcc(struct User u)
     scanf("%s", r.userName);
     printf("\n\n\t\tEnter your account number : ");
     scanf("%d", &r.accountId);
-    
+
     check(cr);
     cr.accountId = r.accountId;
 
@@ -203,31 +203,37 @@ void createNewAcc(struct User u)
     printf("\n\n\t\tChoose the type of account :\n\n\t\t\t1. Saving\n\n\t\t\t2. Current\n\n\t\t\t3. Fixed01 (for 1 year)\n\n\t\t\t4. Fixed02 (for 2 years)\n\n\t\t\t5. Fixed03 (for 3 years)\n\n\n");
 
     int choice;
-        do {
-    printf("\t\t\tEnter your choice (1-5): ");
-    scanf("%d", &choice);
-
-    switch (choice) {
-        case 1:
-            strcpy(r.accountType, "saving");
-            break;
-        case 2:
-            strcpy(r.accountType, "current");
-            break;
-        case 3:
-            strcpy(r.accountType, "fixed01");
-            break;
-        case 4:
-            strcpy(r.accountType, "fixed02");
-            break;
-        case 5:
-            strcpy(r.accountType, "fixed03");
-            break;
-        default:
+    do {
+        printf("\t\t\tEnter your choice (1-5): ");
+        if (scanf("%d", &choice) != 1) {
             system("afplay /System/Library/Sounds/Ping.aiff");
             printf("\n\t\t*** ✖ Invalid choice! Please enter a valid option ***\n");
-            break;
-    }
+            // Vider le flux d'entrée pour éviter une boucle infinie
+            while (getchar() != '\n');
+            continue;
+        }
+
+        switch (choice) {
+            case 1:
+                strcpy(r.accountType, "saving");
+                break;
+            case 2:
+                strcpy(r.accountType, "current");
+                break;
+            case 3:
+                strcpy(r.accountType, "fixed01");
+                break;
+            case 4:
+                strcpy(r.accountType, "fixed02");
+                break;
+            case 5:
+                strcpy(r.accountType, "fixed03");
+                break;
+            default:
+                system("afplay /System/Library/Sounds/Ping.aiff");
+                printf("\n\t\t*** ✖ Invalid choice! Please enter a valid option ***\n");
+                break;
+        }
     } while (choice < 1 || choice > 5);
 
     saveAccountToFile(pf, r, u);
@@ -330,8 +336,13 @@ void registration(struct User *u)
     int choice;
         do {
     printf("\t\t\tEnter your choice (1-5): ");
-    scanf("%d", &choice);
-
+        if (scanf("%d", &choice) != 1) {
+            system("afplay /System/Library/Sounds/Ping.aiff");
+            printf("\n\t\t*** ✖ Invalid choice! Please enter a valid option ***\n");
+            // Vider le flux d'entrée pour éviter une boucle infinie
+            while (getchar() != '\n');
+            continue;
+        }
     switch (choice) {
         case 1:
             strcpy(r.accountType, "saving");

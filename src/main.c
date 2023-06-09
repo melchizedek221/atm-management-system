@@ -17,7 +17,15 @@ void mainMenu(struct User u)
     printf("\n\t\t\t\t[7]- Transfer ownership\n");
     printf("\n\t\t\t\t[8]- Exit\n");
     printf("\n\t\t\t\tYour choise : ");
-    scanf("%d", &option);
+
+    while (scanf("%d", &option) != 1)
+    {
+        system("afplay /System/Library/Sounds/Ping.aiff");
+        printf(ANSI_COLOR_RED"\n\t\t******* Insert a valid operation! ******\n"ANSI_COLOR_RESET);
+        // Vider le flux d'entrée pour éviter une boucle infinie
+        while (getchar() != '\n');
+        printf("\n\t\t\t\tYour choice : ");
+    }
 
     switch (option)
     {
@@ -25,55 +33,39 @@ void mainMenu(struct User u)
         createNewAcc(u);
         break;
     case 2:
-        // student TODO : add your **Update account information** function
-        // here
-       updateAcc();
-       
-    break;
-
+        updateAcc();
+        break;
     case 3:
-        // student TODO : add your **Check the details of existing accounts** function
-        // here
         checkDet();
         break;
     case 4:
         checkAllAccounts(u);
         break;
     case 5:
-        // student TODO : add your **Make transaction** function
-        // here
         transact();
         break;
     case 6:
-        // student TODO : add your **Remove existing account** function
-        // here
         removeAcc();
-
         break;
     case 7:
-        // student TODO : add your **Transfer owner** function
-        // here
         transferAcc();
         break;
-
     case 8:
-         printf(ANSI_COLOR_GREEN"\n\n\t\t*** Thanks for using ATM! ***\n\n"ANSI_COLOR_RESET);
-
+        printf(ANSI_COLOR_GREEN"\n\n\t\t*** Thanks for using ATM! ***\n\n"ANSI_COLOR_RESET);
         exit(1);
         break;
-
     default:
         system("afplay /System/Library/Sounds/Ping.aiff");
         printf(ANSI_COLOR_RED"\n\n\t\tInvalid operation!\n"ANSI_COLOR_RESET);
     }
-};
+}
+
 
 void initMenu(struct User *u)
 {
     int r = 0;
     int option;
     system("clear");
-    //system("color F13");
     printf("\t\t==================== ATM ====================\n");
     printf("\n\t\t******* Feel free to login / register *******\n");
     printf("\n\t\t\t\t[1]- Login\n");
@@ -82,7 +74,15 @@ void initMenu(struct User *u)
     printf("\n\t\t\t\tYour choice : ");
     while (!r)
     {
-        scanf("%d", &option);
+        if (scanf("%d", &option) != 1)
+        {
+            system("afplay /System/Library/Sounds/Ping.aiff");
+            printf(ANSI_COLOR_RED"\n\t\t******* Insert a valid operation! ******\n"ANSI_COLOR_RESET);
+            print("\n\t\tYour choise : ");
+            // Vider le flux d'entrée pour éviter une boucle infinie
+            while (getchar() != '\n');
+            continue;
+        }
         switch (option)
         {
         case 1:
@@ -90,29 +90,23 @@ void initMenu(struct User *u)
             encryptPassword(u->password);
             if (strcmp(u->password, getPassword(*u)) == 0)
             {
-            system("afplay /System/Library/Sounds/Pop.aiff");
-            printf("\n\n\t\t\t******* Password Match! Welcome %s ******" , u->name);
-
+                system("afplay /System/Library/Sounds/Pop.aiff");
+                printf("\n\n\t\t\t******* Password Match! Welcome %s ******" , u->name);
             }
             else
             {
                 system("afplay /System/Library/Sounds/Ping.aiff");
                 printf(ANSI_COLOR_RED"\n\t\t******** Wrong password or User Name *********\n"ANSI_COLOR_RESET);
                 stayOrReturnInit();
-
             }
             r = 1;
             break;
         case 2:
-            // student TODO : add your **Registration** function
-            // here
             registration(u);
             r = 1;
             break;
-
         case 3:
             printf(ANSI_COLOR_GREEN"\n\n\t\t*********** Thanks for using ATM! ***********\n\n"ANSI_COLOR_RESET);
-
             exit(1);
             break;
         default:
@@ -120,7 +114,8 @@ void initMenu(struct User *u)
             printf(ANSI_COLOR_RED"\n\t\t******* Insert a valid operation! ******\n"ANSI_COLOR_RESET);
         }
     }
-};
+}
+
 
 int main()
 {
