@@ -305,7 +305,7 @@ void registration(struct User *u)
     scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
     printf("\n\n\t\tEnter your name : ");
     scanf("%s", cr.userName);
-    
+
     checkName(cr);
     strcpy(cr.userName, r.userName);
 
@@ -503,6 +503,8 @@ void transact(void)
     struct Record tr;
     struct User u;
 
+    system("clear");
+
     printf("\n\t\t*********** Transaction ************");       
     printf("\n\n\t\tEnter the account number of the customer : ");
     scanf("%d",&tr.accountId);
@@ -523,10 +525,10 @@ void transact(void)
                 scanf("%d",&choice);
                 if (choice==1)
                 {
-                    printf("\n\n\t\tEnter the amount you want to deposit :$ ");
+                    printf("\n\n\t\tEnter the amount you want to deposit: $");
                     scanf("%lf",&tr.balance);
 
-                    r.balance+=tr.balance;
+                    r.balance += tr.balance; 
 
                 fprintf(newrec, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n\n",
                     u.id,
@@ -546,7 +548,7 @@ void transact(void)
                     printf("\n\n\t\tEnter the amount you want to withdraw : $ ");
                     scanf("%lf",&tr.balance);
 
-                    r.balance-=tr.balance;
+                    r.balance -=tr.balance;
                 fprintf(newrec, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n\n",
                     u.id,
                     r.id,
@@ -583,11 +585,6 @@ void transact(void)
        system("afplay /System/Library/Sounds/Ping.aiff");
        printf(ANSI_COLOR_RED"\n\n\t\tRecord not found!!\n"ANSI_COLOR_RESET);
        stayOrReturnMain();
-   }else
-    {
-    system("afplay /System/Library/Sounds/Ping.aiff");
-    printf(ANSI_COLOR_RED"\n\n\t\tInvalid!"ANSI_COLOR_RESET);
-    stayOrReturnMain();
     }
 fclose(old);
 fclose(newrec);
@@ -601,13 +598,12 @@ success(u);
 void checkDet(void)
 {
     FILE *ptr;
-    int test=0,rate;
+    int test=0;
     int choice;
-    float time;
     float intrst;
     struct User u;
     struct Record ch;
-
+    double rate;
 
     ptr=fopen(RECORDS,"r");
 
@@ -623,7 +619,7 @@ void checkDet(void)
             {
                 test=1;
 
-                printf("\n\n\t\tAccount NO. :%d \n\n\t\tName :%s \n\n\t\tDOB :%d/%d/%d \n\n\t\tCountry :%s \n\n\t\tPhone number :%d \n\n\t\tType Of Account :%s \n\n\t\tAmount deposited:$ %f",
+                printf("\n\n\t\tAccount Number: %d \n\n\t\tName: %s \n\n\t\tDate of Cr.: %d/%d/%d \n\n\t\tCountry: %s \n\n\t\tPhone number: %d \n\n\t\tType Of Account: %s \n\n\t\tBalance: $ %.2f",
                     r.accountId,
 	                r.userName,
                     r.deposit.month,
@@ -634,31 +630,31 @@ void checkDet(void)
                     r.accountType,
                     r.balance);
 
-                if(strcmp(r.accountType,"fixed1")==0)
+                if(strcmp(r.accountType, "fixed01")==0)
                     {
-                        rate=0.04/100;
+                        rate = 0.0004;
                         intrst = r.balance * rate ;
                         printf("\n\n\n\t\tYou will get $%.2f as interest on %d/%d/%d",intrst,r.deposit.month,r.deposit.day,r.deposit.year+1);
                     }
-                else if(strcmp(r.accountType,"fixed2")==0)
+                else if(strcmp(r.accountType,"fixed02")==0)
                     {
                         rate=0.05/100;
-                        intrst=(time * r.balance *rate)/100;
+                        intrst=2*(r.balance *rate);
                         printf("\n\n\n\t\tYou will get $%.2f as interest on %d/%d/%d",intrst,r.deposit.month,r.deposit.day,r.deposit.year+2);
 
                     }
-                else if(strcmp(r.accountType,"fixed3")==0)
+                else if(strcmp(r.accountType,"fixed03")==0)
                     {
                         rate=0.08/100;
-                        intrst=r.balance *rate;
+                        intrst=3*(r.balance *rate);
                         printf("\n\n\n\t\tYou will get $%.2f as interest on %d/%d/%d",intrst,r.deposit.month,r.deposit.day,r.deposit.year+3);
 
                     }
                  else if(strcmp(r.accountType,"saving")==0)
                     {
                         rate=0.07/100;
-                        intrst=r.balance *rate;
-                        printf("\n\n\n\t\tYou will get $%.2f as interest",intrst);
+                        intrst = r.balance * rate;
+                        printf("\n\n\n\t\tYou will get $%.2f as interest on day 10 of every month", intrst);
 
                      }
                  else if(strcmp(r.accountType,"current")==0)
