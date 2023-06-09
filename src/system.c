@@ -114,9 +114,9 @@ void check(struct Record cr) {
         {
             /* code */
             system("afplay /System/Library/Sounds/Ping.aiff");
-            printf(ANSI_COLOR_RED"\n\t\t*** ✖This account already exists! ***\n"ANSI_COLOR_RESET);
+            printf(ANSI_COLOR_RED"\n\n\t\t*** ✖This account already exists! ***\n"ANSI_COLOR_RESET);
                 add_invalid:
-            printf(ANSI_COLOR_RED"\n\n\n\t\tEnter 1 to go to the main menu and 0 to exit : "ANSI_COLOR_RESET);
+            printf(ANSI_COLOR_RED"\n\n\t\tEnter 1 to go to the main menu and 0 to exit : "ANSI_COLOR_RESET);
             scanf("%d",&main_exit);
             
             system("clear"); 
@@ -273,14 +273,11 @@ void registration(struct User *u)
     printf("\n\n\t\tEnter your username : ");
     scanf("%s", u->name);
     printf("\n\n\t\tEnter your user ID : ");
-    scanf("%d", &cr.id);
-
+    scanf("%d", &r.id);
     printf("\n\n\t\tEnter the account number : ");
     scanf("%d", &cr.accountId);
-
     check(cr);
-    r.id=cr.id;
-    cr.accountId = r.accountId;
+    r.accountId = cr.accountId;
 
     printf("\n\n\t\tEnter the country : ");
     scanf("%s", r.country);
@@ -575,7 +572,7 @@ void checkDet(void)
     ptr=fopen(RECORDS,"r");
 
     system("clear");
-    printf("\n\t\t******** Check the details of existing accounts *********\n");       
+    printf("\n\t\t******* Check details of existing accounts *******\n");       
     
         printf("\n\t\tEnter the account number : ");
         scanf("%d",&ch.accountId);
