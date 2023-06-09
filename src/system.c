@@ -100,6 +100,40 @@ int lastId(FILE* file) {
     return num_lines;
 }
 
+void checkName(struct Record cr) {
+    
+    FILE *fp = fopen(RECORDS, "r");
+   
+    struct Record r;
+    struct User u;
+
+    while (getAccountFromFile(fp, &r, &u))
+    {
+        if (strcmp(cr.userName, r.userName) == 0)
+        {
+            /* code */
+            system("afplay /System/Library/Sounds/Ping.aiff");
+            printf(ANSI_COLOR_RED"\n\n\t\t*** ✖This account already exists! ***\n"ANSI_COLOR_RESET);
+                add_invalid:
+            printf(ANSI_COLOR_RED"\n\n\t\tEnter 1 to go to the main menu and 0 to exit : "ANSI_COLOR_RESET);
+            scanf("%d",&main_exit);
+            
+            system("clear"); 
+            if (main_exit==1)
+                initMenu(&u);
+            else if(main_exit==0)
+            exit(1);
+    else
+        {
+            system("afplay /System/Library/Sounds/Ping.aiff");
+            printf(ANSI_COLOR_RED"\n\t\t************ Invalid! **************\n"ANSI_COLOR_RESET);
+            goto add_invalid;
+        }
+        }
+    }
+    fclose(fp);
+}
+
 // function to check if the id already exists
 void check(struct Record cr) {
     
@@ -254,6 +288,7 @@ void encryptPassword(char *password) {
 //Create a new account / register
 void registration(struct User *u)
 {
+    struct User *cu;
     struct Record r;
     struct termios oflags, nflags;
 
@@ -269,9 +304,14 @@ void registration(struct User *u)
     printf("\n\n\t\tEnter today's date(mm/dd/yyyy) : ");
     scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
     printf("\n\n\t\tEnter your name : ");
-    scanf("%s", r.userName);
+    scanf("%s", cr.userName);
+    
+    checkName(cr);
+    strcpy(cr.userName, r.userName);
+
     printf("\n\n\t\tEnter your username : ");
     scanf("%s", u->name);
+
     printf("\n\n\t\tEnter your user ID : ");
     scanf("%d", &r.id);
     printf("\n\n\t\tEnter the account number : ");
