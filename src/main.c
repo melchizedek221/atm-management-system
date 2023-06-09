@@ -78,7 +78,7 @@ void initMenu(struct User *u)
         {
             system("afplay /System/Library/Sounds/Ping.aiff");
             printf(ANSI_COLOR_RED"\n\t\t******* Insert a valid operation! ******\n"ANSI_COLOR_RESET);
-            print("\n\t\tYour choise : ");
+            printf("\n\t\tYour choise : ");
             // Vider le flux d'entrée pour éviter une boucle infinie
             while (getchar() != '\n');
             continue;
