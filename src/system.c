@@ -166,8 +166,6 @@ void createNewAcc(struct User u)
     scanf("%d", &r.phone);
     printf("\n\n\t\tEnter amount to deposit : $");
     scanf("%lf", &r.balance);
-    printf("\n\n\t\tChoose the type of account :\n\n\t\t\t-> saving\n\n\t\t\t-> current\n\n\t\t\t-> fixed01(for 1 year)\n\n\t\t\t-> fixed02(for 2 years)\n\n\t\t\t-> fixed03(for 3 years)\n\n\n\t\t\tEnter your choice : ");
-    scanf("%s", r.accountType);
     printf("\n\n\t\tChoose the type of account :\n\n\t\t\t1. Saving\n\n\t\t\t2. Current\n\n\t\t\t3. Fixed01 (for 1 year)\n\n\t\t\t4. Fixed02 (for 2 years)\n\n\t\t\t5. Fixed03 (for 3 years)\n\n\n");
 
     int choice;
