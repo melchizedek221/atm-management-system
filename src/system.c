@@ -321,7 +321,7 @@ void registration(struct User *u)
     printf("\n\n\t\tEnter your name: ");
     scanf("%s", cr.userName);
     checkName(cr);
-    strcpy(cr.userName, r.userName);
+    strcpy(r.userName, cr.userName);
 
     printf("\n\n\t\tEnter your username : ");
     scanf("%s", u->name);
