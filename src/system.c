@@ -307,11 +307,19 @@ void registration(struct User *u)
     u->id=lastId(pf);
 
     printf("\n\n\t\t================== New Record ==================\n");
-    printf("\n\n\t\tEnter today's date(mm/dd/yyyy) : ");
+    printf("\n\n\t\tEnter today's date (mm/dd/yyyy): ");
     scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
-    printf("\n\n\t\tEnter your name : ");
-    scanf("%s", cr.userName);
 
+    if (!isValidDate(r.deposit.day, r.deposit.month, r.deposit.year)) {
+        system("afplay /System/Library/Sounds/Ping.aiff");
+        printf(ANSI_COLOR_RED"\n\t\t*** ✖ Invalid date! ***\n"ANSI_COLOR_RESET);
+        clearInputBuffer();
+        printf("\n\n\t\tEnter today's date (mm/dd/yyyy): ");
+        scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
+}
+
+    printf("\n\n\t\tEnter your name: ");
+    scanf("%s", cr.userName);
     checkName(cr);
     strcpy(cr.userName, r.userName);
 
@@ -320,9 +328,11 @@ void registration(struct User *u)
 
     printf("\n\n\t\tEnter your user ID : ");
     scanf("%d", &r.id);
+
     printf("\n\n\t\tEnter the account number : ");
     scanf("%d", &cr.accountId);
     check(cr);
+
     r.accountId = cr.accountId;
 
     printf("\n\n\t\tEnter the country : ");
@@ -338,7 +348,7 @@ void registration(struct User *u)
     printf("\t\t\tEnter your choice (1-5): ");
         if (scanf("%d", &choice) != 1) {
             system("afplay /System/Library/Sounds/Ping.aiff");
-            printf("\n\t\t*** ✖ Invalid choice! Please enter a valid option ***\n");
+            printf(ANSI_COLOR_RED"\n\t\t*** ✖ Invalid choice! Please enter a valid option ***\n"ANSI_COLOR_RESET);
             // Vider le flux d'entrée pour éviter une boucle infinie
             while (getchar() != '\n');
             continue;
@@ -936,3 +946,53 @@ void stayOrReturnMain(){
                     goto edit_invalid;}
 }
 
+
+void clearInputBuffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {
+    }
+}
+
+int isValidDate(int day, int month, int year) {
+    if (year < 1900 || year > 9999) {
+        return 0; // Année invalide
+    }
+
+    if (month < 1 || month > 12) {
+        return 0; // Mois invalide
+    }
+
+    int daysInMonth;
+    switch (month) {
+        case 1: // Janvier
+        case 3: // Mars
+        case 5: // Mai
+        case 7: // Juillet
+        case 8: // Août
+        case 10: // Octobre
+        case 12: // Décembre
+            daysInMonth = 31;
+            break;
+        case 4: // Avril
+        case 6: // Juin
+        case 9: // Septembre
+        case 11: // Novembre
+            daysInMonth = 30;
+            break;
+        case 2: // Février
+            if ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0) {
+                daysInMonth = 29; // Année bissextile
+            } else {
+                daysInMonth = 28;
+            }
+            break;
+        default:
+            return 0; // Mois invalide
+    }
+
+    if (day < 1 || day > daysInMonth) {
+        return 0; // Jour invalide
+    }
+
+    return 1; // Date valide
+}

@@ -21,7 +21,7 @@ void mainMenu(struct User u)
     while (scanf("%d", &option) != 1)
     {
         system("afplay /System/Library/Sounds/Ping.aiff");
-        printf(ANSI_COLOR_RED"\n\t\t******* Insert a valid operation! ******\n"ANSI_COLOR_RESET);
+        printf(ANSI_COLOR_RED"\n\t\t******** Insert a valid operation! *******\n"ANSI_COLOR_RESET);
         // Vider le flux d'entrée pour éviter une boucle infinie
         while (getchar() != '\n');
         printf("\n\t\t\t\tYour choice : ");

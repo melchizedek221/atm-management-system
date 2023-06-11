@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <sys/types.h>
 #include <termios.h>
-
+#include <time.h>
 
 // Codes d'échappement ANSI pour les couleurs
 #define ANSI_COLOR_RESET "\033[0m"
@@ -58,3 +58,5 @@ void stayOrReturnMain();
 void stayOrReturnInit();
 void sendMessage(struct Record cr, const char* message);
 void encryptPassword(char *password);
+int isValidDate(int day, int month, int year);
+void clearInputBuffer();
