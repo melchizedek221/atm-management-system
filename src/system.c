@@ -256,19 +256,19 @@ void createNewAcc(struct User *u)
 void checkAllAccounts(struct User u)
 {
     struct Record r;
-    struct User cu;
+    struct Record cr;
 
     FILE *pf = fopen(RECORDS, "r");
 
     system("clear");
     printf("\n\t\t******** Check Accounts *********\n");       
-    printf("\n\n\t\t Your username : ");
-    scanf("%s", cu.name);
-    printf("\n\n\t\t====== All accounts from user, %s =====\n\n", u.name);
+    printf("\n\n\t\t Your name : ");
+    scanf("%s", cr.userName);
+    printf("\n\n\t\t====== All accounts from user, %s =====\n\n", r.userName);
     while (getAccountFromFile(pf, &r, &u))
     {
 
-        if (strcmp(cu.name, u.name) == 0)
+        if (strcmp(cr.userName, r.userName) == 0)
         {
             printf("_____________________\n");
             printf("\nAccount number:%d\nDeposit Date:%d/%d/%d \ncountry:%s \nPhone number:%d \nAmount deposited: $%.2f \nType Of Account:%s\n",
@@ -565,7 +565,7 @@ void transact(void)
                     r.balance,
                     r.accountType);                   
                 }
-                else
+                else if (choice == 2) 
                 {
                     printf("\n\n\t\tEnter the amount you want to withdraw : $ ");
                     scanf("%lf",&tr.balance);
@@ -585,6 +585,10 @@ void transact(void)
                     r.accountType); 
                     
                 }
+                else 
+                {
+                    printf("\n\t\t\t\tPlease choose a option below : ");
+                }
 
             }
             else
@@ -600,7 +604,7 @@ void transact(void)
                     r.country,
                     r.phone,
                     r.balance,
-                    r.accountType);             }
+                    r.accountType);}
    }
    if(test==0)
    {
@@ -690,7 +694,7 @@ void checkDet(void)
         }
     
     fclose(ptr);
-     if(test==0)
+    if(test==0)
         {  
             system("afplay /System/Library/Sounds/Ping.aiff");
             printf(ANSI_COLOR_RED"\n\n\t\tRecord not found!!\n"ANSI_COLOR_RESET);
@@ -717,7 +721,7 @@ void removeAcc(void)
     struct User u;
     struct Record rm;
     struct Record r;
-    struct User ru;
+    struct Record dr;
 
     FILE *old, *newrec, *user, *newuser;
     int test=0;
@@ -732,8 +736,8 @@ void removeAcc(void)
     printf("\n\n\t\tEnter the account number of the customer you want to delete : ");
     scanf("%d",&rm.accountId);
 
-    printf("\n\n\t\tEnter the username of the customer you want to delete : ");
-    scanf("%s",ru.name);
+    printf("\n\n\t\tEnter the name of the customer you want to delete : ");
+    scanf("%s", dr.userName);
     
     while (getAccountFromFile(old, &r, &u)) 
     {
@@ -754,12 +758,12 @@ void removeAcc(void)
 
         } else test++;
 
-        fscanf(user, "%d %s %s", &r.id, u.name, u.password);
-        if (strcmp(ru.name, u.name)!=0)
+        fscanf(user, "%d %s %s", &r.id, r.userName, u.password);
+        if (strcmp(dr.userName, r.userName)!=0)
         {
             fprintf(newuser, "%d %s %s \n\n",
                     r.id,
-                    u.name,
+                    r.userName,
                     u.password);  
         }
         else
@@ -812,7 +816,7 @@ void transferAcc(void){
 
     struct User u;
     struct User cu;
-    struct User bu;
+    struct Record br;
     struct Record cr;
 
 
@@ -838,9 +842,9 @@ void transferAcc(void){
             
             system("clear");
             printf("\n\t\t******** Change Account Owner *********\n"); 
-            printf("\n\n\t\tEnter your username : ");
-            scanf("%s",bu.name);      
-            printf("\n\n\t\tEnter the username of reciever : ");
+            printf("\n\n\t\tEnter your name : ");
+            scanf("%s",br.userName);      
+            printf("\n\n\t\tEnter the name of reciever : ");
             scanf("%s",cr.userName);
 
             {
@@ -873,12 +877,12 @@ void transferAcc(void){
                     r.balance,
                     r.accountType);    
 
-            fscanf(user, "%d %s %s", &r.id, u.name, u.password);
-        if (strcmp(bu.name, u.name)!=0)
+            fscanf(user, "%d %s %s", &r.id, r.userName, u.password);
+        if (strcmp(br.userName, r.userName)!=0)
         {
             fprintf(newuser, "%d %s %s \n\n",
                     r.id,
-                    u.name,
+                    r.userName,
                     u.password);  
         }
         else
