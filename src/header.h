@@ -5,6 +5,7 @@
 #include <sys/types.h>
 #include <termios.h>
 #include <time.h>
+#include <ctype.h>
 
 // Codes d'échappement ANSI pour les couleurs
 #define ANSI_COLOR_RESET "\033[0m"
@@ -44,7 +45,7 @@ void registerMenu(char a[50], char pass[50]);
 const char *getPassword(struct User u);
 
 // system function
-void createNewAcc(struct User u);
+void createNewAcc(struct User *u);
 void mainMenu(struct User u);
 void initMenu(struct User *u);
 void checkAllAccounts(struct User u);

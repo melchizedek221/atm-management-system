@@ -30,7 +30,7 @@ void mainMenu(struct User u)
     switch (option)
     {
     case 1:
-        createNewAcc(u);
+        createNewAcc(&u);
         break;
     case 2:
         updateAcc();
@@ -56,7 +56,8 @@ void mainMenu(struct User u)
         break;
     default:
         system("afplay /System/Library/Sounds/Ping.aiff");
-        printf(ANSI_COLOR_RED"\n\n\t\tInvalid operation!\n"ANSI_COLOR_RESET);
+        printf(ANSI_COLOR_RED"\n\n\t\t********  Invalid operation!  ********\n"ANSI_COLOR_RESET);
+        stayOrReturnMain();
     }
 }
 
@@ -112,6 +113,7 @@ void initMenu(struct User *u)
         default:
             system("afplay /System/Library/Sounds/Ping.aiff");
             printf(ANSI_COLOR_RED"\n\t\t******* Insert a valid operation! ******\n"ANSI_COLOR_RESET);
+            printf("\n\t\t\tYour choice: ");
         }
     }
 }

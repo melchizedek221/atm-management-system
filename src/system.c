@@ -52,7 +52,7 @@ void saveUsersToFile(FILE *ptr, struct User u, struct Record r)
 {
     fprintf(ptr, "%d %s %s\n\n",
 	        r.id,
-            u.name,
+            r.userName,
             u.password);
 }
 
@@ -111,7 +111,7 @@ void checkName(struct Record cr) {
     {
         if (strcmp(cr.userName, r.userName) == 0)
         {
-            /* code */
+            
             system("afplay /System/Library/Sounds/Ping.aiff");
             printf(ANSI_COLOR_RED"\n\n\t\t*** ✖This account already exists! ***\n"ANSI_COLOR_RESET);
                 add_invalid:
@@ -170,76 +170,86 @@ void check(struct Record cr) {
 }
 
 //Create a new account / register
-void createNewAcc(struct User u)
+void createNewAcc(struct User *u)
 {
+ struct User *cu;
     struct Record r;
-    struct Record cr;
-    char userName[50];
-
+    struct termios oflags, nflags;
+    
     FILE *pf = fopen(RECORDS, "a+");
+    FILE *pf1 = fopen(USERS, "a+");
 
     system("clear");
-
-    getAccountFromFile(pf, &r, &u);
-    u.id = lastId(pf);
-
-    printf("\n\n\t\t================== NEW-RECORD ==================\n");
-    printf("\n\n\t\tEnter today's date(mm/dd/yyyy) : ");
+    u->id=lastId(pf);
+    printf("\n\n\t\t================== New Record ==================\n");
+    printf("\n\n\t\tEnter today's date (mm/dd/yyyy): ");
     scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
-    printf("\n\n\t\tEnter your name : ");
+
+    if (!isValidDate(r.deposit.day, r.deposit.month, r.deposit.year)) {
+        system("afplay /System/Library/Sounds/Ping.aiff");
+        printf(ANSI_COLOR_RED"\n\t\t*** ✖ Invalid date! ***\n"ANSI_COLOR_RESET);
+        clearInputBuffer();
+        stayOrReturnInit();
+    }
+
+    printf("\n\n\t\tEnter your name: ");
     scanf("%s", r.userName);
-    printf("\n\n\t\tEnter your account number : ");
-    scanf("%d", &r.accountId);
 
+    printf("\n\n\t\tEnter your user ID : ");
+    scanf("%d", &r.id);
+
+    printf("\n\n\t\tEnter the account number : ");
+    scanf("%d", &cr.accountId);
     check(cr);
-    cr.accountId = r.accountId;
+    r.accountId = cr.accountId;
 
-    printf("\n\n\t\tEnter your country : ");
+    printf("\n\n\t\tEnter the country : ");
     scanf("%s", r.country);
-    printf("\n\n\t\tEnter your phone number : ");
+    printf("\n\n\t\tEnter the phone number : ");
     scanf("%d", &r.phone);
     printf("\n\n\t\tEnter amount to deposit : $");
     scanf("%lf", &r.balance);
     printf("\n\n\t\tChoose the type of account :\n\n\t\t\t1. Saving\n\n\t\t\t2. Current\n\n\t\t\t3. Fixed01 (for 1 year)\n\n\t\t\t4. Fixed02 (for 2 years)\n\n\t\t\t5. Fixed03 (for 3 years)\n\n\n");
 
     int choice;
-    do {
-        printf("\t\t\tEnter your choice (1-5): ");
+        do {
+    printf("\t\t\tEnter your choice (1-5): ");
         if (scanf("%d", &choice) != 1) {
             system("afplay /System/Library/Sounds/Ping.aiff");
-            printf("\n\t\t*** ✖ Invalid choice! Please enter a valid option ***\n");
+            printf(ANSI_COLOR_RED"\n\t\t*** ✖ Invalid choice! Please enter a valid option ***\n"ANSI_COLOR_RESET);
             // Vider le flux d'entrée pour éviter une boucle infinie
             while (getchar() != '\n');
             continue;
         }
-
-        switch (choice) {
-            case 1:
-                strcpy(r.accountType, "saving");
-                break;
-            case 2:
-                strcpy(r.accountType, "current");
-                break;
-            case 3:
-                strcpy(r.accountType, "fixed01");
-                break;
-            case 4:
-                strcpy(r.accountType, "fixed02");
-                break;
-            case 5:
-                strcpy(r.accountType, "fixed03");
-                break;
-            default:
-                system("afplay /System/Library/Sounds/Ping.aiff");
-                printf("\n\t\t*** ✖ Invalid choice! Please enter a valid option ***\n");
-                break;
-        }
+    switch (choice) {
+        case 1:
+            strcpy(r.accountType, "saving");
+            break;
+        case 2:
+            strcpy(r.accountType, "current");
+            break;
+        case 3:
+            strcpy(r.accountType, "fixed01");
+            break;
+        case 4:
+            strcpy(r.accountType, "fixed02");
+            break;
+        case 5:
+            strcpy(r.accountType, "fixed03");
+            break;
+        default:
+            system("afplay /System/Library/Sounds/Ping.aiff");
+            printf(ANSI_COLOR_RED"\n\t\t*** ✖ Invalid choice! Please enter a valid option ***\n"ANSI_COLOR_RESET);
+            break;
+    }
     } while (choice < 1 || choice > 5);
 
-    saveAccountToFile(pf, r, u);
+    saveAccountToFile(pf, r, *u);
 
     fclose(pf);
-    success(u);
+    fclose(pf1);
+
+    success(*u);
 }
 
 //check accounts with same id
@@ -297,15 +307,12 @@ void registration(struct User *u)
     struct User *cu;
     struct Record r;
     struct termios oflags, nflags;
-
     
     FILE *pf = fopen(RECORDS, "a+");
     FILE *pf1 = fopen(USERS, "a+");
 
     system("clear");
-
     u->id=lastId(pf);
-
     printf("\n\n\t\t================== New Record ==================\n");
     printf("\n\n\t\tEnter today's date (mm/dd/yyyy): ");
     scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
@@ -314,17 +321,13 @@ void registration(struct User *u)
         system("afplay /System/Library/Sounds/Ping.aiff");
         printf(ANSI_COLOR_RED"\n\t\t*** ✖ Invalid date! ***\n"ANSI_COLOR_RESET);
         clearInputBuffer();
-        printf("\n\n\t\tEnter today's date (mm/dd/yyyy): ");
-        scanf("%d/%d/%d", &r.deposit.month, &r.deposit.day, &r.deposit.year);
-}
+        stayOrReturnInit();
+    }
 
     printf("\n\n\t\tEnter your name: ");
     scanf("%s", cr.userName);
     checkName(cr);
     strcpy(r.userName, cr.userName);
-
-    printf("\n\n\t\tEnter your username : ");
-    scanf("%s", u->name);
 
     printf("\n\n\t\tEnter your user ID : ");
     scanf("%d", &r.id);
@@ -332,7 +335,6 @@ void registration(struct User *u)
     printf("\n\n\t\tEnter the account number : ");
     scanf("%d", &cr.accountId);
     check(cr);
-
     r.accountId = cr.accountId;
 
     printf("\n\n\t\tEnter the country : ");
@@ -398,7 +400,6 @@ void registration(struct User *u)
     }
 
     encryptPassword(u->password);
-
     saveAccountToFile(pf, r, *u);
     saveUsersToFile(pf1, *u, r);
 
@@ -428,7 +429,7 @@ void updateAcc(void)
 
     system("clear");
     printf("\n\t\t******** Update Account Information *********\n");       
-    printf("\n\n\tYour account number : ");
+    printf("\n\n\tYour account number: ");
     scanf("%d",&cr.accountId);
     
     while(getAccountFromFile(old, &r, &u))
@@ -447,7 +448,7 @@ void updateAcc(void)
             printf("\n\t\t******** Update Account Information *********\n");                
             if(choice==1)
                 {
-                printf("\n\n\t\tEnter the new country : ");
+                printf("\n\n\t\tEnter the new country: ");
                 scanf("%s",cr.country);
                 fprintf(newrec, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n\n",
                     u.id,
@@ -465,7 +466,7 @@ void updateAcc(void)
                 }
             else if(choice==2)
                 {
-                printf("\n\n\t\tEnter the new phone number:");
+                printf("\n\n\t\tEnter the new phone number: ");
                 scanf("%d",&cr.phone);
                 fprintf(newrec, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n\n",
                     u.id,
