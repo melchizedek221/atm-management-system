@@ -194,10 +194,8 @@ void createNewAcc(struct User *u)
 
     printf("\n\n\t\tEnter your name: ");
     scanf("%s", r.userName);
-
     printf("\n\n\t\tEnter your user ID : ");
     scanf("%d", &r.id);
-
     printf("\n\n\t\tEnter the account number : ");
     scanf("%d", &cr.accountId);
     check(cr);
