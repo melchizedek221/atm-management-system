@@ -537,7 +537,7 @@ void transact(void)
                 if(strcasecmp(r.accountType,"fixed01")==0 || strcasecmp(r.accountType,"fixed02")==0 || strcasecmp(r.accountType,"fixed03")==0)
                 {
                 system("afplay /System/Library/Sounds/Ping.aiff");
-                printf(ANSI_COLOR_RED"\n\n\n\n\n\t\tSorry you cannot make deposit or withdrawal in this kind of account!!!!!"ANSI_COLOR_RESET);
+                printf(ANSI_COLOR_RED"\n\n\t\tSorry you cannot make deposit or withdrawal in this kind of account!!!!!\n"ANSI_COLOR_RESET);
                 stayOrReturnMain();
                 }
 
