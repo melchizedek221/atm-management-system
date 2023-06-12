@@ -252,7 +252,7 @@ void createNewAcc(struct User *u)
     success(*u);
 }
 
-//check accounts with same id
+//check accounts with same name
 void checkAllAccounts(struct User u)
 {
     struct Record r;
@@ -280,13 +280,13 @@ void checkAllAccounts(struct User u)
                    r.phone,
                    r.balance,
                    r.accountType);
+                   stayOrReturnMain();
         }else{
-                printf("\t\t\nNo match ");
+                printf(ANSI_COLOR_RED"\n\t\t\tNo match "ANSI_COLOR_RESET);
 
         }
     }
     fclose(pf);
-    success(u);
 }
 
 void encryptPassword(char *password) {
@@ -429,7 +429,7 @@ void updateAcc(void)
 
     system("clear");
     printf("\n\t\t******** Update Account Information *********\n");       
-    printf("\n\n\tYour account number: ");
+    printf("\n\n\t\tYour account number: ");
     scanf("%d",&cr.accountId);
     
     while(getAccountFromFile(old, &r, &u))
@@ -482,7 +482,8 @@ void updateAcc(void)
                     r.accountType);                
                      
                 }
-            else
+        }
+                    else
                 {
                     fprintf(newrec, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n\n",
                     u.id,
@@ -497,13 +498,12 @@ void updateAcc(void)
                     r.balance,
                     r.accountType);  
                 }  
-        }
     }
 
     if(test==0) 
     {  
         system("afplay /System/Library/Sounds/Ping.aiff");
-        printf(ANSI_COLOR_RED"\n\t\tRecord not found!!\n\n\n\n"ANSI_COLOR_RESET);
+        printf(ANSI_COLOR_RED"\n\t\tRecord not found!!\n"ANSI_COLOR_RESET);
         remove("new.txt");
         stayOrReturnMain();
     }
@@ -836,14 +836,13 @@ void transferAcc(void){
  
     while(getAccountFromFile(old, &r, &u))
     {
-        if (r.accountId==cr.accountId) 
-        
-        {   test=1;
+        if (cr.accountId==r.accountId) 
+        {   
+            test=1;
             
-            system("clear");
-            printf("\n\t\t******** Change Account Owner *********\n"); 
             printf("\n\n\t\tEnter your name : ");
-            scanf("%s",br.userName);      
+            scanf("%s",br.userName);
+
             printf("\n\n\t\tEnter the name of reciever : ");
             scanf("%s",cr.userName);
 
@@ -864,7 +863,7 @@ void transferAcc(void){
             }
         }
         else
-                fprintf(newrec, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n\n",
+             {   fprintf(newrec, "%d %d %s %d %d/%d/%d %s %d %.2lf %s\n\n",
                     u.id,
                     r.id,
 	                r.userName,
@@ -875,9 +874,12 @@ void transferAcc(void){
                     r.country,
                     r.phone,
                     r.balance,
-                    r.accountType);    
+                    r.accountType);
 
-            fscanf(user, "%d %s %s", &r.id, r.userName, u.password);
+                printf("\n\n\t No match !!!"); 
+            } 
+
+        fscanf(user, "%d %s %s", &r.id, r.userName, u.password);
         if (strcmp(br.userName, r.userName)!=0)
         {
             fprintf(newuser, "%d %s %s \n\n",
@@ -901,9 +903,6 @@ void transferAcc(void){
     rename("new.txt",RECORDS);
     rename("new2.txt",USERS);
 
-    success(u);
-
-
         if(test==0)
         { 
             system("afplay /System/Library/Sounds/Ping.aiff");
@@ -911,6 +910,9 @@ void transferAcc(void){
             stayOrReturnMain();
             
         }
+
+    success(u);
+
 
 }
 
